@@ -28,7 +28,8 @@ function createConfig(alg,setupmoves,speed=400,sampletxt='sample',highlight='') 
     let string = ``;
     string += `alg=${alg}`
     string += `|setupmoves=${setupmoves}`
-    string += `|hover=1|speed=${speed}|flags=""`; //showalg
+    string += `|hover=1|speed=${speed}|flags=''`; //showalg
+    //string += `|colors=U:#ffffff`
     if(highlight!='') {
         string += `|colored=${highlight}`;
     }
@@ -36,20 +37,68 @@ function createConfig(alg,setupmoves,speed=400,sampletxt='sample',highlight='') 
     return string
 }
 
-function initiateAlg(alg,startAlgorithm = "", speed=400,num=0) {
+function initiateAlg(alg,startAlgorithm = "", speed=400,num=0,highlightBoolean=true) {
     let preventXYZstring = preventXYZ((countXYZ(randAlg + " " + alg)));
     let startSequence = startAlgorithm == "" ? preventXYZstring + alg : preventXYZstring + startAlgorithm + " " + alg;
-    return createConfig(alg,startSequence,speed,num,algoArray[num][0]);
+    let highlight = highlightBoolean ? algoArray[num][0] : "";
+    return createConfig(alg,startSequence,speed,num,highlight);
 }
 
 function getStartAlg() {
     return [randAlg,partialSolve].join(' ').trim();
 }
 
-function loadCurrent(speed=400,num) {
+function loadCurrent(speed=400,num,multipleBoolean=false) {
     //cubeFrame.src = initiateAlg(testAlg,getStartAlg(),speed,num);
-    //CubeAnimation.create_in_dom('#cube1parent', initiateAlg(testAlg,getStartAlg(),speed,num), "class='roofpig'");
+    clearAllCanvases();
+    removeDivById('cube1');
+    CubeAnimation.create_in_dom('#cube1parent', initiateAlg(testAlg,getStartAlg(),speed,num), "id=cube1 class='roofpig mycube noBorder'");
+    cube1 = document.getElementById('cube1')
     cube1.setAttribute('data-config',initiateAlg(testAlg,getStartAlg(),speed,num));
+    if(multipleBoolean) {
+        let highlightBoolean = false;
+        removeDivById('cube2');
+        CubeAnimation.create_in_dom('#cube2parent', initiateAlg(testAlg,getStartAlg(),speed,num,highlightBoolean), "id=cube2 class='roofpig mycube noBorder'");
+        cube1 = document.getElementById('cube2')
+        cube1.setAttribute('data-config',initiateAlg(testAlg,getStartAlg(),speed,num,highlightBoolean));  
+    }
+}
+
+function removeElementAndChildren(element) {
+    // Check if the element exists
+    if (element) {
+        // Recursively remove all children
+        while (element.firstChild) {
+            removeElementAndChildren(element.firstChild);  // Recursively remove child elements
+        }
+        // Once all children are removed, remove the parent element itself
+        element.remove();
+        console.log(`Element with ID '${element.id}' and all nested children have been removed.`);
+    }
+}
+
+function removeDivById(divId) {
+    const element = document.getElementById(divId);
+    removeElementAndChildren(element);  // Call the recursive function
+}
+
+function deleteHelp() {
+    const elements = document.querySelectorAll('[id*="help-"]');
+    for(let element of elements) {
+        removeElementAndChildren(element);
+    }
+}
+
+function clearAllCanvases() {
+    // Find all canvas elements in the document
+    const canvases = document.querySelectorAll('canvas');
+
+    // Iterate over each canvas element
+    canvases.forEach(canvas => {
+        
+    });
+
+    console.log(`Cleared ${canvases.length} canvas elements.`);
 }
 
 function reverseMoves(moves) {
@@ -260,29 +309,64 @@ function replaceXYZRUF(input) {
 'FLU','FLD'
 
 let algoArray = [
-    ['D*/e U*/m',"F' F' F U F' y' x x' U' F' F' y' F' F' F U' R "],
+    ['D*/e U*/m',"F' F' F U F' y' x x' U' F' F' y' F' F' F U' R"],
     ['D*/e */m',"U U F' F' y U F' F' y F' F' y U F' F' x x'"],
     ['RBD U*/m',"y'"],
     ['RBD B*/m R*/m U*/m',"y U' R U R' U'"],
     ["BLD B*/m L*/m U*/m","y' y' y' U y L' U' L U"],
     ["FRD F*/m R*/m","y' y y U' U' R U R' U' R U R' U' R U R' U'"],
-    ["FLD","y' R U R' U' "],
-    ["FLD F*/m L*/m","R U R' U' "],
+    ["FLD","y' R U R' U'"],
+    ["FLD F*/m L*/m","R U R' U'"],
     ["BL","y'"],
     ["BL B*/m L*/m D*","U' y U' L' U' L U y' R U R' U'"],
     ["RB B*/m R*/m D*","y' U U R U R' U' y L' U' L U"],
     ["RF FLD","y R U R' U' y L' U' L U"], //11
     ["RF R*/m F*/m D*","U' y U' L' U' L U y' R U R' U'"],
     ["FL L*/m F*/m D*","y' y U' L' U' L U y' R U R' U "],
-    ["U*/e U*/m","U f R U R' U' f' "],
+    ["U*/e U*/m","U f R U R' U' f'"],
     ["R*/m F*/m B*/m L*/m U*/e U*/m","y y y U' y y y U' y' y' R U R' U R U2' R' U y y y y"],
     ["*/m U*/c U*/e","y' y' y'"], //16
     ["R*/m F*/m UFR","y R U' L' U R' U' L U"],
-    ["","y' y' x x R U R' U' R U R' U' x x' D R U R' U' R U R' U' x x' D D R U R' U' R U R' U' D"],
+    ["U* */m","y' y' x x R U R' U' R U R' U' x x' D R U R' U' R U R' U' x x' D D R U R' U' R U R' U' D"],
     ["",""],
 ]
 
 let currentNum = 0;
+let currentMove = 0;
+
+testAlg = algoArray[0][1];
+partialSolve = "";
+loadCurrent(200,0,true);
+setTimeout(deleteHelp, 4);
+
+
+function nextAction() {
+    let moves = algoArray[currentNum][1].split(' ');
+    if(currentMove > moves.length-1) {
+        currentNum += 1;
+        currentMove = 0;
+        testAlg = algoArray[currentNum][1];
+        partialSolve = concatAlgoArrayUpTo(currentNum);
+        loadCurrent(100,currentNum,true);
+    } else {
+        console.log(currentNum)
+        pressNextButton();
+        currentMove += 1;
+    }
+    deleteHelp();
+}
+
+function pressNextButton(id="") {
+    if(id=="") {
+        const elements = document.querySelectorAll('[id*="next-"]');
+        for(let element of elements) {
+            element.click();
+        }
+        //elements[0].click();
+    } else {
+        document.getElementById(id).click();
+    }
+}
 
 function concatAlgoArrayUpTo(number,array=algoArray) {
     let string = ""
@@ -293,15 +377,10 @@ function concatAlgoArrayUpTo(number,array=algoArray) {
     return string.trim();
 }
 
-testAlg = algoArray[0][1];
-partialSolve = "";
-loadCurrent(200);
+
 
 document.getElementById('b1').addEventListener('click', function() {
-    let num = 1;
-    testAlg = algoArray[num][1];
-    partialSolve = concatAlgoArrayUpTo(num);
-    loadCurrent(100,num);
+    nextAction();
 });
 
 

@@ -2,11 +2,28 @@
 <head>
   <meta charset="utf-8" />
   <style>
-    .rp160 { width: 160px; height: 180px; }
-    .rp170 { width: 170px; height: 203px; }
-    .rp250 { width: 250px; height: 299px; }
-    .rp440 { width: 440px; height: 499px; }
+    .mycube { width: 440px; height: 499px; }
     .left { float: left; }
+    .noBorder { border: none !important;}
+    .transparent { opacity: 0.25; }
+
+    .flex-container {
+            display: flex;
+            justify-content: flex-start;
+            /*space-between;  Optional: adds space between the divs */
+        }
+
+        /* Optional styles for cube containers */
+        #cube1parent, #cube2parent {
+            /*width: 45%;  Adjust the width as needed */
+            background-color: #FFFFFF00;
+            padding: 0px;
+            padding: 0; /* No padding */
+            margin: 0;  /* No margin */
+            box-sizing: border-box;
+            position: absolute;
+            z-index: 1;;
+        }
   </style>
 
   <script>
@@ -30,8 +47,14 @@
   <button id="b8">Button 8</button>
   <button id="b9">Button 9</button>
   <button id="b10">Button 10</button>
-
-  <div id='cube1' style="height:235px; width: 190px;" class="roofpig" data-config="alg=M M' x y2 z' E E' S S' M E S M E S|flags=showalg"></div>
+  <div class="flex-container">
+    <div id="cube1parent" width="fit-content" style="background-color: antiquewhite;">
+      <div id='cube1' style="height:235px; width: 190px;" class="roofpig" data-config="alg=M M' x y2 z' E E' S S' M E S M E S|flags=showalg"></div>
+    </div>
+    <div id="cube2parent" class="transparent">
+      <div id='cube2' style="height:235px; width: 190px;" class="roofpig" data-config="alg=M M' x y2 z' E E' S S' M E S M E S|flags=showalg"></div>
+    </div>
+  </div>
 
 <script src="../lib/jquery-3.1.1.min.js"></script>
 <script src="../roofpig_and_three.min.js"></script>
