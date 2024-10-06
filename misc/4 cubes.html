@@ -1,0 +1,91 @@
+<!doctype html>
+<head>
+  <meta charset="utf-8" />
+  <style>
+    .mycube { width: 200px; }
+    .left { float: left; }
+    .noBorder { border: none !important;}
+    .transparent { opacity: 0.25; }
+    .button { height: 35px; }
+    .hide { display: none;}
+
+    #cubeDiv {
+  display: flex;
+  justify-content: space-between;
+}
+
+  .parent {
+    position: relative;
+    width: 20%; /* Each parent div takes 20% of the page width */
+    height: 500px; /* Adjust height as needed */
+    background-color: antiquewhite;
+  }
+
+  .cube {
+    position: absolute !important;
+    top:0px;
+  }
+
+
+    .flex-container {
+            display: flex;
+            justify-content: flex-start;
+            /*space-between;  Optional: adds space between the divs */
+        }
+
+        /* Optional styles for cube containers */
+        #cube1parent, #cube2parent {
+            /*width: 45%;  Adjust the width as needed */
+            background-color: #FFFFFF00;
+            padding: 0px;
+            padding: 0; /* No padding */
+            margin: 0;  /* No margin */
+            box-sizing: border-box;
+            position: absolute;
+            z-index: 1;;
+        }
+  </style>
+
+  <script>
+    ROOFPIG_CONF_P1 = "colors=cube:white|hover=1.8";
+    ROOFPIG_CONF_F4 = "solved=UR-|colors=F:b B:g U:r D:o R:w L:y c:#666|colored=U UL-";
+    ROOFPIG_CONF_F5 = "solved=U- |colors=F:b B:g U:r D:o R:w L:y";
+  </script>
+</head>
+
+<body>
+  <button class="button" id="b1">Button 1</button>
+  <button class="button" id="b2">Button 2</button>
+  <button class="button" id="b3">Button 3</button>
+  <button class="button" id="b4">Button 4</button>
+  <button class="button" id="b5">Button 5</button>
+
+  <h1>4 cubes to turn them all.</h1>
+
+  <div id="cubeDiv">
+      <div id='parent0' class="parent">
+        <div class="cube roofpig mycube" id="cube0a" data-config="alg=M M' x y2 z' E E' S S' M E S M E S|flags=showalg"></div>
+        <div class="cube roofpig mycube" id="cube0b" data-config="alg=M M' x y2 z' E E' S S' M E S M E S|flags=showalg"></div>
+      </div>
+      
+      <div id='parent1' class="parent">
+        <div class="cube roofpig mycube" id="cube1a" data-config="alg=M M' x y2 z' E E' S S' M E S M E S|flags=showalg"></div>
+        <div class="cube roofpig mycube" id="cube1b" data-config="alg=M M' x y2 z' E E' S S' M E S M E S|flags=showalg"></div>
+      </div>
+      
+      <div id='parent2' class="parent">
+        <div class="cube roofpig mycube" id="cube2a" data-config="alg=M M' x y2 z' E E' S S' M E S M E S|flags=showalg"></div>
+        <div class="cube roofpig mycube" id="cube2b" data-config="alg=M M' x y2 z' E E' S S' M E S M E S|flags=showalg"></div>
+      </div>
+      
+      <div id='parent3' class="parent">
+        <div class="cube roofpig mycube" id="cube3a" data-config="alg=M M' x y2 z' E E' S S' M E S M E S|flags=showalg"></div>
+        <div class="cube roofpig mycube" id="cube3b" data-config="alg=M M' x y2 z' E E' S S' M E S M E S|flags=showalg"></div>
+      </div>
+    </div>    
+
+<script src="../lib/jquery-3.1.1.min.js"></script>
+<script src="../roofpig_and_three.min.js"></script>
+<script src="4cubescript.js"></script>
+
+</body>
